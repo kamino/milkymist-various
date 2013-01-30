@@ -14,7 +14,8 @@ usage: $(BUILDDIR)/system-routed.xdl
 	../../../tools/xdlanalyze.pl $(BUILDDIR)/system-routed.xdl 0
 
 load: $(BUILDDIR)/system.bit
-	jtag -n load.batch
+	# jtag -n load.batch
+	cd $(BUILDDIR) && impact -batch ../impact.batch
 
 # Sometimes different options are needed to meet timing
 build/system.ncd: build/system.ngd
@@ -73,6 +74,6 @@ $(BUILDDIR)/system-routed5.ncd: $(BUILDDIR)/system5.ncd
 	cd $(BUILDDIR) && par -ol high -w system5.ncd system-routed5.ncd > par5
 
 clean:
-	rm -rf build/* build-rescue/*
+	rm -rf build/*
 
 .PHONY: timing usage load mppr clean
