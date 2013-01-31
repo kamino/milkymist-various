@@ -19,143 +19,148 @@
 `include "lm32_include.v"
 
 module system(
-	input clkin50,
+	input clkin100,
 
 	// Boot ROM
-	output [23:0] flash_adr,
+	output [25:0] flash_adr,
 	inout [15:0] flash_d,
 	output flash_oe_n,
-	output flash_we_n,
+	output flash_we,
 	output flash_ce_n,
 	output flash_rst_n,
-	input flash_sts,
 
 	// UART
 	input uart_rx,
 	output uart_tx,
 
 	// GPIO
-	input btn1,
-	input btn2,
-	input btn3,
+	input btnl,
+	input btns,
+	input btnr,
+	output led0,
 	output led1,
 	output led2,
+	output led3,
+	output led4,
+	output led5,
+	output led6,
+	output led7
 
 	// DDR SDRAM
-	output sdram_clk_p,
-	output sdram_clk_n,
-	output sdram_cke,
-	output sdram_cs_n,
-	output sdram_we_n,
-	output sdram_cas_n,
-	output sdram_ras_n,
-	output [3:0] sdram_dm,
-	output [12:0] sdram_adr,
-	output [1:0] sdram_ba,
-	inout [31:0] sdram_dq,
-	inout [3:0] sdram_dqs,
+// 	output sdram_clk_p,
+// 	output sdram_clk_n,
+// 	output sdram_cke,
+// 	output sdram_cs_n,
+// 	output sdram_we_n,
+// 	output sdram_cas_n,
+// 	output sdram_ras_n,
+// 	output [3:0] sdram_dm,
+// 	output [12:0] sdram_adr,
+// 	output [1:0] sdram_ba,
+// 	inout [31:0] sdram_dq,
+// 	inout [3:0] sdram_dqs,
 
 	// VGA
-	output vga_psave_n,
-	output vga_hsync_n,
-	output vga_vsync_n,
-	output [7:0] vga_r,
-	output [7:0] vga_g,
-	output [7:0] vga_b,
-	output vga_clk,
-	inout vga_sda,
-	output vga_sdc,
+// 	output vga_psave_n,
+// 	output vga_hsync_n,
+// 	output vga_vsync_n,
+// 	output [7:0] vga_r,
+// 	output [7:0] vga_g,
+// 	output [7:0] vga_b,
+// 	output vga_clk,
+// 	inout vga_sda,
+// 	output vga_sdc,
 
 	// Memory card
-	inout [3:0] mc_d,
-	inout mc_cmd,
-	output mc_clk,
+// 	inout [3:0] mc_d,
+// 	inout mc_cmd,
+// 	output mc_clk,
 
 	// AC97
-	input ac97_clk,
-	input ac97_sin,
-	output ac97_sout,
-	output ac97_sync,
-	output ac97_rst_n,
+// 	input ac97_clk,
+// 	input ac97_sin,
+// 	output ac97_sout,
+// 	output ac97_sync,
+// 	output ac97_rst_n,
 
 	// USB
-	output usba_spd,
-	output usba_oe_n,
-	input usba_rcv,
-	inout usba_vp,
-	inout usba_vm,
-
-	output usbb_spd,
-	output usbb_oe_n,
-	input usbb_rcv,
-	inout usbb_vp,
-	inout usbb_vm,
+// 	output usba_spd,
+// 	output usba_oe_n,
+// 	input usba_rcv,
+// 	inout usba_vp,
+// 	inout usba_vm,
+// 
+// 	output usbb_spd,
+// 	output usbb_oe_n,
+// 	input usbb_rcv,
+// 	inout usbb_vp,
+// 	inout usbb_vm,
 
 	// Ethernet
-	output phy_rst_n,
-	input phy_tx_clk,
-	output [3:0] phy_tx_data,
-	output phy_tx_en,
-	output phy_tx_er,
-	input phy_rx_clk,
-	input [3:0] phy_rx_data,
-	input phy_dv,
-	input phy_rx_er,
-	input phy_col,
-	input phy_crs,
-	input phy_irq_n,
-	output phy_mii_clk,
-	inout phy_mii_data,
-	output phy_clk,
+// 	output phy_rst_n,
+// 	input phy_tx_clk,
+// 	output [3:0] phy_tx_data,
+// 	output phy_tx_en,
+// 	output phy_tx_er,
+// 	input phy_rx_clk,
+// 	input [3:0] phy_rx_data,
+// 	input phy_dv,
+// 	input phy_rx_er,
+// 	input phy_col,
+// 	input phy_crs,
+// 	input phy_irq_n,
+// 	output phy_mii_clk,
+// 	inout phy_mii_data,
+// 	output phy_clk,
 
 	// Video Input
-	input [7:0] videoin_p,
-	input videoin_hs,
-	input videoin_vs,
-	input videoin_field,
-	input videoin_llc,
-	input videoin_irq_n,
-	output videoin_rst_n,
-	inout videoin_sda,
-	output videoin_sdc,
+// 	input [7:0] videoin_p,
+// 	input videoin_hs,
+// 	input videoin_vs,
+// 	input videoin_field,
+// 	input videoin_llc,
+// 	input videoin_irq_n,
+// 	output videoin_rst_n,
+// 	inout videoin_sda,
+// 	output videoin_sdc,
 
 	// MIDI
-	output midi_tx,
-	input midi_rx,
+// 	output midi_tx,
+// 	input midi_rx,
 
 	// DMX512
-	input dmxa_r,
-	output dmxa_de,
-	output dmxa_d,
-	input dmxb_r,
-	output dmxb_de,
-	output dmxb_d,
+// 	input dmxa_r,
+// 	output dmxa_de,
+// 	output dmxa_d,
+// 	input dmxb_r,
+// 	output dmxb_de,
+// 	output dmxb_d,
 
 	// IR
-	input ir_rx,
-
-	// Expansion connector
-	input [11:0] exp,
-
-	// PCB revision
-	input [3:0] pcb_revision
+// 	input ir_rx,
+// 
+// 	// Expansion connector
+// 	input [11:0] exp,
+// 
+// 	// PCB revision
+// 	input [3:0] pcb_revision
 );
 
 //------------------------------------------------------------------
 // Clock and Reset Generation
 //------------------------------------------------------------------
 wire hard_reset;
-wire reset_button = btn1 & btn2 & btn3;
+wire reset_button = btnl & btns & btnr;
 
 `ifndef SIMULATION
-wire clkin50_b;
-IBUFG clk50_ibuf(
-	.I(clkin50),
-	.O(clkin50_b)
+wire clkin100_b;
+IBUFG clkin100_ibuf(
+	.I(clkin100),
+	.O(clkin100_b)
 );
 
 wire clk24_pll;
-wire phy_clk_pll;
+wire clk25_pll;
 wire clkgen600_fb;
 PLL_BASE #(
 	.COMPENSATION("INTERNAL"),
@@ -178,20 +183,20 @@ PLL_BASE #(
 	.CLKOUT3_DUTY_CYCLE(0.50),
 	.CLKOUT4_DUTY_CYCLE(0.50),
 	.CLKOUT5_DUTY_CYCLE(0.50),
-	.CLKFBOUT_MULT(12),		// 600 MHz
+	.CLKFBOUT_MULT(6),		// 600 MHz
 	.DIVCLK_DIVIDE(1),
 	.CLKFBOUT_PHASE(0.0),
 	.REF_JITTER(0.100),
 	.CLKIN_PERIOD(0.000)
 ) clkgen600 (
 	.CLKOUT0(clk24_pll),
-	.CLKOUT1(phy_clk_pll),
+	.CLKOUT1(clk25_pll),
 	.CLKOUT2(),
 	.CLKOUT3(),
 	.CLKOUT4(),
 	.CLKOUT5(),
 	.CLKFBOUT(clkgen600_fb),
-	.CLKIN(clkin50_b),
+	.CLKIN(clkin100_b),
 	.CLKFBIN(clkgen600_fb),
 	.LOCKED(),
 	.RST(1'b0)
@@ -203,14 +208,21 @@ BUFG clk24_buf(
 	.O(clk24)
 );
 
+wire clk25;
+BUFG clk25_buf(
+	.I(clk25_pll),
+	.O(clk25)
+);
+
+
 OBUF phy_clk_obuf(
-	.I(phy_clk_pll),
+	.I(clk25),
 	.O(phy_clk)
 );
 
-wire usb_clk_pll;
-wire sys_clk_pll;
-wire sys_clk_n_pll;
+wire clk72_pll;
+wire clk80_pll;
+wire clk80_n_pll;
 wire clkgen720_fb;
 PLL_BASE #(
 	.COMPENSATION("INTERNAL"),
@@ -239,9 +251,9 @@ PLL_BASE #(
 	.REF_JITTER(0.100),
 	.CLKIN_PERIOD(0.000)
 ) clkgen720 (
-	.CLKOUT0(usb_clk_pll),
-	.CLKOUT1(sys_clk_pll),
-	.CLKOUT2(sys_clk_n_pll),
+	.CLKOUT0(clk72_pll),
+	.CLKOUT1(clk80_pll),
+	.CLKOUT2(clk80_n_pll),
 	.CLKOUT3(),
 	.CLKOUT4(),
 	.CLKOUT5(),
@@ -254,19 +266,19 @@ PLL_BASE #(
 
 wire usb_clk;
 BUFG clkgen720_b1(
-	.I(usb_clk_pll),
+	.I(clk72_pll),
 	.O(usb_clk)
 );
 
 wire sys_clk;
 BUFG clkgen720_b2(
-	.I(sys_clk_pll),
+	.I(clk80_pll),
 	.O(sys_clk)
 );
 
 wire sys_clk_n;
 BUFG clkgen720_b3(
-	.I(sys_clk_n_pll),
+	.I(clk80_n_pll),
 	.O(sys_clk_n)
 );
 
@@ -275,8 +287,13 @@ wire sys_clk = clkin;
 wire sys_clk_n = ~clkin;
 `endif
 
+/* Synchronize the reset input */
 reg trigger_reset;
 always @(posedge sys_clk) trigger_reset <= hard_reset|reset_button;
+
+/* Debounce it
+ * and generate power-on reset.
+ */
 reg [19:0] rst_debounce;
 reg sys_rst;
 initial rst_debounce <= 20'hFFFFF;
@@ -289,8 +306,8 @@ always @(posedge sys_clk) begin
 	sys_rst <= rst_debounce != 20'd0;
 end
 
-assign ac97_rst_n = ~sys_rst;
-assign videoin_rst_n = ~sys_rst;
+// assign ac97_rst_n = ~sys_rst;
+// assign videoin_rst_n = ~sys_rst;
 
 /*
  * We must release the Flash reset before the system reset
@@ -370,16 +387,20 @@ wire		cpuibus_ack,
 // Wishbone slave wires
 //------------------------------------------------------------------
 wire [31:0]	norflash_adr,
+        bram_adr,
 		monitor_adr,
 		usb_adr,
 		eth_adr,
 		brg_adr,
 		csrbrg_adr;
 
-wire [2:0]	brg_cti;
+wire [2:0]	brg_cti,
+        bram_cti;
 
 wire [31:0]	norflash_dat_r,
 		norflash_dat_w,
+		bram_dat_r,
+        bram_dat_w,
 		monitor_dat_r,
 		monitor_dat_w,
 		usb_dat_r,
@@ -392,12 +413,14 @@ wire [31:0]	norflash_dat_r,
 		csrbrg_dat_w;
 
 wire [3:0]	norflash_sel,
+		bram_sel,
 		monitor_sel,
 		usb_sel,
 		eth_sel,
 		brg_sel;
 
 wire		norflash_we,
+        bram_we,
 		monitor_we,
 		usb_we,
 		eth_we,
@@ -405,6 +428,7 @@ wire		norflash_we,
 		csrbrg_we;
 
 wire		norflash_cyc,
+		bram_cyc,
 		monitor_cyc,
 		usb_cyc,
 		eth_cyc,
@@ -412,6 +436,7 @@ wire		norflash_cyc,
 		csrbrg_cyc;
 
 wire		norflash_stb,
+		bram_stb,
 		monitor_stb,
 		usb_stb,
 		eth_stb,
@@ -419,6 +444,7 @@ wire		norflash_stb,
 		csrbrg_stb;
 
 wire		norflash_ack,
+		bram_ack,
 		monitor_ack,
 		usb_ack,
 		eth_ack,
@@ -548,15 +574,24 @@ conbus5x6 #(
 	.s3_stb_o(eth_stb),
 	.s3_ack_i(eth_ack),
 	// Slave 4
-	.s4_dat_i(brg_dat_r),
-	.s4_dat_o(brg_dat_w),
-	.s4_adr_o(brg_adr),
-	.s4_cti_o(brg_cti),
-	.s4_sel_o(brg_sel),
-	.s4_we_o(brg_we),
-	.s4_cyc_o(brg_cyc),
-	.s4_stb_o(brg_stb),
-	.s4_ack_i(brg_ack),
+	.s4_dat_i(bram_dat_r),
+	.s4_dat_o(bram_dat_w),
+	.s4_adr_o(bram_adr),
+	.s4_cti_o(bram_cti),
+	.s4_sel_o(bram_sel),
+	.s4_we_o(bram_we),
+	.s4_cyc_o(bram_cyc),
+	.s4_stb_o(bram_stb),
+	.s4_ack_i(bram_ack),
+// 	.s4_dat_i(brg_dat_r),
+// 	.s4_dat_o(brg_dat_w),
+// 	.s4_adr_o(brg_adr),
+// 	.s4_cti_o(brg_cti),
+// 	.s4_sel_o(brg_sel),
+// 	.s4_we_o(brg_we),
+// 	.s4_cyc_o(brg_cyc),
+// 	.s4_stb_o(brg_stb),
+// 	.s4_ack_i(brg_ack),
 	// Slave 5
 	.s5_dat_i(csrbrg_dat_r),
 	.s5_dat_o(csrbrg_dat_w),
@@ -595,127 +630,127 @@ wire [31:0]	csr_dr_uart,
 //------------------------------------------------------------------
 // FML master wires
 //------------------------------------------------------------------
-wire [`SDRAM_DEPTH-1:0]	fml_brg_adr,
-			fml_vga_adr,
-			fml_tmur_adr,
-			fml_tmudr_adr,
-			fml_tmuw_adr,
-			fml_videoin_adr;
-
-wire			fml_brg_stb,
-			fml_vga_stb,
-			fml_tmur_stb,
-			fml_tmudr_stb,
-			fml_tmuw_stb,
-			fml_videoin_stb;
-
-wire			fml_brg_we,
-			fml_tmur_we;
-
-wire			fml_brg_ack,
-			fml_vga_ack,
-			fml_tmur_ack,
-			fml_tmudr_ack,
-			fml_tmuw_ack,
-			fml_videoin_ack;
-
-wire [7:0]		fml_brg_sel,
-			fml_tmur_sel,
-			fml_tmuw_sel;
-
-wire [63:0]		fml_brg_dw,
-			fml_tmur_dw,
-			fml_tmuw_dw,
-			fml_videoin_dw;
-
-wire [63:0]		fml_brg_dr,
-			fml_vga_dr,
-			fml_tmur_dr,
-			fml_tmudr_dr;
+// wire [`SDRAM_DEPTH-1:0]	fml_brg_adr,
+// 			fml_vga_adr,
+// 			fml_tmur_adr,
+// 			fml_tmudr_adr,
+// 			fml_tmuw_adr,
+// 			fml_videoin_adr;
+// 
+// wire			fml_brg_stb,
+// 			fml_vga_stb,
+// 			fml_tmur_stb,
+// 			fml_tmudr_stb,
+// 			fml_tmuw_stb,
+// 			fml_videoin_stb;
+// 
+// wire			fml_brg_we,
+// 			fml_tmur_we;
+// 
+// wire			fml_brg_ack,
+// 			fml_vga_ack,
+// 			fml_tmur_ack,
+// 			fml_tmudr_ack,
+// 			fml_tmuw_ack,
+// 			fml_videoin_ack;
+// 
+// wire [7:0]		fml_brg_sel,
+// 			fml_tmur_sel,
+// 			fml_tmuw_sel;
+// 
+// wire [63:0]		fml_brg_dw,
+// 			fml_tmur_dw,
+// 			fml_tmuw_dw,
+// 			fml_videoin_dw;
+// 
+// wire [63:0]		fml_brg_dr,
+// 			fml_vga_dr,
+// 			fml_tmur_dr,
+// 			fml_tmudr_dr;
 
 //------------------------------------------------------------------
 // FML slave wires, to memory controller
 //------------------------------------------------------------------
-wire [`SDRAM_DEPTH-1:0] fml_adr;
-wire fml_stb;
-wire fml_we;
-wire fml_eack;
-wire [7:0] fml_sel;
-wire [63:0] fml_dw;
-wire [63:0] fml_dr;
+// wire [`SDRAM_DEPTH-1:0] fml_adr;
+// wire fml_stb;
+// wire fml_we;
+// wire fml_eack;
+// wire [7:0] fml_sel;
+// wire [63:0] fml_dw;
+// wire [63:0] fml_dr;
 
 //---------------------------------------------------------------------------
 // FML arbiter
 //---------------------------------------------------------------------------
-fmlarb #(
-	.fml_depth(`SDRAM_DEPTH)
-) fmlarb (
-	.sys_clk(sys_clk),
-	.sys_rst(sys_rst),
-
-	/* VGA framebuffer (high priority) */
-	.m0_adr(fml_vga_adr),
-	.m0_stb(fml_vga_stb),
-	.m0_we(1'b0),
-	.m0_ack(fml_vga_ack),
-	.m0_sel(8'bx),
-	.m0_di(64'bx),
-	.m0_do(fml_vga_dr),
-
-	/* WISHBONE bridge */
-	.m1_adr(fml_brg_adr),
-	.m1_stb(fml_brg_stb),
-	.m1_we(fml_brg_we),
-	.m1_ack(fml_brg_ack),
-	.m1_sel(fml_brg_sel),
-	.m1_di(fml_brg_dw),
-	.m1_do(fml_brg_dr),
-
-	/* TMU, pixel read DMA (texture) */
-	/* Also used as memory test port */
-	.m2_adr(fml_tmur_adr),
-	.m2_stb(fml_tmur_stb),
-	.m2_we(fml_tmur_we),
-	.m2_ack(fml_tmur_ack),
-	.m2_sel(fml_tmur_sel),
-	.m2_di(fml_tmur_dw),
-	.m2_do(fml_tmur_dr),
-
-	/* TMU, pixel write DMA */
-	.m3_adr(fml_tmuw_adr),
-	.m3_stb(fml_tmuw_stb),
-	.m3_we(1'b1),
-	.m3_ack(fml_tmuw_ack),
-	.m3_sel(fml_tmuw_sel),
-	.m3_di(fml_tmuw_dw),
-	.m3_do(),
-
-	/* TMU, pixel read DMA (destination) */
-	.m4_adr(fml_tmudr_adr),
-	.m4_stb(fml_tmudr_stb),
-	.m4_we(1'b0),
-	.m4_ack(fml_tmudr_ack),
-	.m4_sel(8'bx),
-	.m4_di(64'bx),
-	.m4_do(fml_tmudr_dr),
-
-	/* Video in */
-	.m5_adr(fml_videoin_adr),
-	.m5_stb(fml_videoin_stb),
-	.m5_we(1'b1),
-	.m5_ack(fml_videoin_ack),
-	.m5_sel(8'hff),
-	.m5_di(fml_videoin_dw),
-	.m5_do(),
-
-	.s_adr(fml_adr),
-	.s_stb(fml_stb),
-	.s_we(fml_we),
-	.s_eack(fml_eack),
-	.s_sel(fml_sel),
-	.s_di(fml_dr),
-	.s_do(fml_dw)
-);
+// fmlarb #(
+// 	.fml_depth(`SDRAM_DEPTH)
+// ) fmlarb (
+// 	.sys_clk(sys_clk),
+// 	.sys_rst(sys_rst),
+// 
+// 	/* VGA framebuffer (high priority) */
+// 	.m0_adr(fml_vga_adr),
+// 	.m0_stb(fml_vga_stb),
+// 	.m0_we(1'b0),
+// 	.m0_ack(fml_vga_ack),
+// 	.m0_sel(8'bx),
+// 	.m0_di(64'bx),
+// 	.m0_do(fml_vga_dr),
+// 
+// 	/* WISHBONE bridge */
+// 	.m1_adr(fml_brg_adr),
+// 	.m1_stb(fml_brg_stb),
+// 	.m1_we(fml_brg_we),
+// 	.m1_ack(fml_brg_ack),
+// 	.m1_sel(fml_brg_sel),
+// 	.m1_di(fml_brg_dw),
+// 	.m1_do(fml_brg_dr),
+// 
+// 	/* TMU, pixel read DMA (texture) */
+// 	/* Also used as memory test port */
+// 	.m2_adr(fml_tmur_adr),
+// 	.m2_stb(fml_tmur_stb),
+// 	.m2_we(fml_tmur_we),
+// 	.m2_ack(fml_tmur_ack),
+// 	.m2_sel(fml_tmur_sel),
+// 	.m2_di(fml_tmur_dw),
+// 	.m2_do(fml_tmur_dr),
+// 
+// 	/* TMU, pixel write DMA */
+// 	.m3_adr(fml_tmuw_adr),
+// 	.m3_stb(fml_tmuw_stb),
+// 	.m3_we(1'b1),
+// 	.m3_ack(fml_tmuw_ack),
+// 	.m3_sel(fml_tmuw_sel),
+// 	.m3_di(fml_tmuw_dw),
+// 	.m3_do(),
+// 
+// 	/* TMU, pixel read DMA (destination) */
+// 	.m4_adr(fml_tmudr_adr),
+// 	.m4_stb(fml_tmudr_stb),
+// 	.m4_we(1'b0),
+// 	.m4_ack(fml_tmudr_ack),
+// 	.m4_sel(8'bx),
+// 	.m4_di(64'bx),
+// 	.m4_do(fml_tmudr_dr),
+// 
+// 	/* Video in */
+// 	.m5_adr(fml_videoin_adr),
+// 	.m5_stb(fml_videoin_stb),
+// 	.m5_we(1'b1),
+// 	.m5_ack(fml_videoin_ack),
+// 	.m5_sel(8'hff),
+// 	.m5_di(fml_videoin_dw),
+// 	.m5_do(),
+// 
+// 	.s_adr(fml_adr),
+// 	.s_stb(fml_stb),
+// 	.s_we(fml_we),
+// 	.s_eack(fml_eack),
+// 	.s_sel(fml_sel),
+// 	.s_di(fml_dr),
+// 	.s_do(fml_dw)
+// );
 
 //---------------------------------------------------------------------------
 // WISHBONE to CSR bridge
@@ -759,40 +794,40 @@ csrbrg csrbrg(
 //---------------------------------------------------------------------------
 // WISHBONE to FML bridge
 //---------------------------------------------------------------------------
-wire dcb_stb;
-wire [`SDRAM_DEPTH-1:0] dcb_adr;
-wire [63:0] dcb_dat;
-wire dcb_hit;
-
-fmlbrg #(
-	.fml_depth(`SDRAM_DEPTH)
-) fmlbrg (
-	.sys_clk(sys_clk),
-	.sys_rst(sys_rst),
-
-	.wb_adr_i(brg_adr),
-	.wb_cti_i(brg_cti),
-	.wb_dat_o(brg_dat_r),
-	.wb_dat_i(brg_dat_w),
-	.wb_sel_i(brg_sel),
-	.wb_stb_i(brg_stb),
-	.wb_cyc_i(brg_cyc),
-	.wb_ack_o(brg_ack),
-	.wb_we_i(brg_we),
-
-	.fml_adr(fml_brg_adr),
-	.fml_stb(fml_brg_stb),
-	.fml_we(fml_brg_we),
-	.fml_ack(fml_brg_ack),
-	.fml_sel(fml_brg_sel),
-	.fml_di(fml_brg_dr),
-	.fml_do(fml_brg_dw),
-
-	.dcb_stb(dcb_stb),
-	.dcb_adr(dcb_adr),
-	.dcb_dat(dcb_dat),
-	.dcb_hit(dcb_hit)
-);
+// wire dcb_stb;
+// wire [`SDRAM_DEPTH-1:0] dcb_adr;
+// wire [63:0] dcb_dat;
+// wire dcb_hit;
+// 
+// fmlbrg #(
+// 	.fml_depth(`SDRAM_DEPTH)
+// ) fmlbrg (
+// 	.sys_clk(sys_clk),
+// 	.sys_rst(sys_rst),
+// 
+// 	.wb_adr_i(brg_adr),
+// 	.wb_cti_i(brg_cti),
+// 	.wb_dat_o(brg_dat_r),
+// 	.wb_dat_i(brg_dat_w),
+// 	.wb_sel_i(brg_sel),
+// 	.wb_stb_i(brg_stb),
+// 	.wb_cyc_i(brg_cyc),
+// 	.wb_ack_o(brg_ack),
+// 	.wb_we_i(brg_we),
+// 
+// 	.fml_adr(fml_brg_adr),
+// 	.fml_stb(fml_brg_stb),
+// 	.fml_we(fml_brg_we),
+// 	.fml_ack(fml_brg_ack),
+// 	.fml_sel(fml_brg_sel),
+// 	.fml_di(fml_brg_dr),
+// 	.fml_do(fml_brg_dw),
+// 
+// 	.dcb_stb(dcb_stb),
+// 	.dcb_adr(dcb_adr),
+// 	.dcb_dat(dcb_dat),
+// 	.dcb_hit(dcb_hit)
+// );
 
 //---------------------------------------------------------------------------
 // Interrupts
@@ -907,6 +942,7 @@ lm32_top cpu(
 //---------------------------------------------------------------------------
 // Boot ROM
 //---------------------------------------------------------------------------
+wire flash_we_n;
 norflash16 #(
 	.adr_width(24)
 ) norflash (
@@ -922,13 +958,38 @@ norflash16 #(
 	.wb_ack_o(norflash_ack),
 	.wb_we_i(norflash_we),
 
-	.flash_adr(flash_adr),
+	.flash_adr(flash_adr[23:0]),
 	.flash_d(flash_d),
 	.flash_oe_n(flash_oe_n),
 	.flash_we_n(flash_we_n)
 );
 
+assign flash_adr[25:24] = {2'b0}; 
+assign flash_we = ~flash_we_n;
 assign flash_ce_n = 1'b0;
+
+//---------------------------------------------------------------------------
+// BRAM
+//---------------------------------------------------------------------------
+//
+// On this board, we have 16k of SRAM instead of 4k
+// so that we have space for loading some programs.
+//
+bram #(
+    .adr_width(14)
+) bram (
+    .sys_clk(sys_clk),
+    .sys_rst(sys_rst),
+
+    .wb_adr_i(bram_adr),
+    .wb_dat_o(bram_dat_r),
+    .wb_dat_i(bram_dat_w),
+    .wb_sel_i(bram_sel),
+    .wb_stb_i(bram_stb),
+    .wb_cyc_i(bram_cyc),
+    .wb_ack_o(bram_ack),
+    .wb_we_i(bram_we)
+);
 
 //---------------------------------------------------------------------------
 // Monitor ROM / RAM
@@ -991,10 +1052,10 @@ wire [31:0] capabilities;
 
 sysctl #(
 	.csr_addr(4'h1),
-	.ninputs(7),
-	.noutputs(2),
+	.ninputs(3),
+	.noutputs(8),
 	.clk_freq(`CLOCK_FREQUENCY),
-	.systemid(32'h13004D31) /* 1.3.0 final (0) on M1 */
+	.systemid(32'h13004D31)
 ) sysctl (
 	.sys_clk(sys_clk),
 	.sys_rst(sys_rst),
@@ -1008,8 +1069,8 @@ sysctl #(
 	.csr_di(csr_dw),
 	.csr_do(csr_dr_sysctl),
 
-	.gpio_inputs({pcb_revision, btn3, btn2, btn1}),
-	.gpio_outputs({led2, led1}),
+	.gpio_inputs({btnl, btns, btnr}),
+	.gpio_outputs({led0, led1, led2, led3, led4, led5, led6, led7}),
 
 	.debug_write_lock(debug_write_lock),
 	.bus_errors_en(bus_errors_en),
@@ -1025,77 +1086,77 @@ gen_capabilities gen_capabilities(
 //---------------------------------------------------------------------------
 // DDR SDRAM
 //---------------------------------------------------------------------------
-ddram #(
-	.csr_addr(4'h2)
-) ddram (
-	.sys_clk(sys_clk),
-	.sys_clk_n(sys_clk_n),
-	.sys_rst(sys_rst),
-
-	.csr_a(csr_a),
-	.csr_we(csr_we),
-	.csr_di(csr_dw),
-	.csr_do(csr_dr_hpdmc),
-
-	.fml_adr(fml_adr),
-	.fml_stb(fml_stb),
-	.fml_we(fml_we),
-	.fml_eack(fml_eack),
-	.fml_sel(fml_sel),
-	.fml_di(fml_dw),
-	.fml_do(fml_dr),
-
-	.sdram_clk_p(sdram_clk_p),
-	.sdram_clk_n(sdram_clk_n),
-	.sdram_cke(sdram_cke),
-	.sdram_cs_n(sdram_cs_n),
-	.sdram_we_n(sdram_we_n),
-	.sdram_cas_n(sdram_cas_n),
-	.sdram_ras_n(sdram_ras_n),
-	.sdram_dm(sdram_dm),
-	.sdram_adr(sdram_adr),
-	.sdram_ba(sdram_ba),
-	.sdram_dq(sdram_dq),
-	.sdram_dqs(sdram_dqs)
-);
+// ddram #(
+// 	.csr_addr(4'h2)
+// ) ddram (
+// 	.sys_clk(sys_clk),
+// 	.sys_clk_n(sys_clk_n),
+// 	.sys_rst(sys_rst),
+// 
+// 	.csr_a(csr_a),
+// 	.csr_we(csr_we),
+// 	.csr_di(csr_dw),
+// 	.csr_do(csr_dr_hpdmc),
+// 
+// 	.fml_adr(fml_adr),
+// 	.fml_stb(fml_stb),
+// 	.fml_we(fml_we),
+// 	.fml_eack(fml_eack),
+// 	.fml_sel(fml_sel),
+// 	.fml_di(fml_dw),
+// 	.fml_do(fml_dr),
+// 
+// 	.sdram_clk_p(sdram_clk_p),
+// 	.sdram_clk_n(sdram_clk_n),
+// 	.sdram_cke(sdram_cke),
+// 	.sdram_cs_n(sdram_cs_n),
+// 	.sdram_we_n(sdram_we_n),
+// 	.sdram_cas_n(sdram_cas_n),
+// 	.sdram_ras_n(sdram_ras_n),
+// 	.sdram_dm(sdram_dm),
+// 	.sdram_adr(sdram_adr),
+// 	.sdram_ba(sdram_ba),
+// 	.sdram_dq(sdram_dq),
+// 	.sdram_dqs(sdram_dqs)
+// );
 
 //---------------------------------------------------------------------------
 // VGA
 //---------------------------------------------------------------------------
-vga #(
-	.csr_addr(4'h3),
-	.fml_depth(`SDRAM_DEPTH)
-) vga (
-	.sys_clk(sys_clk),
-	.clk50(clkin50_b),
-	.sys_rst(sys_rst),
-
-	.csr_a(csr_a),
-	.csr_we(csr_we),
-	.csr_di(csr_dw),
-	.csr_do(csr_dr_vga),
-
-	.fml_adr(fml_vga_adr),
-	.fml_stb(fml_vga_stb),
-	.fml_ack(fml_vga_ack),
-	.fml_di(fml_vga_dr),
-
-	.dcb_stb(dcb_stb),
-	.dcb_adr(dcb_adr),
-	.dcb_dat(dcb_dat),
-	.dcb_hit(dcb_hit),
-
-	.vga_psave_n(vga_psave_n),
-	.vga_hsync_n(vga_hsync_n),
-	.vga_vsync_n(vga_vsync_n),
-	.vga_r(vga_r),
-	.vga_g(vga_g),
-	.vga_b(vga_b),
-	.vga_clk(vga_clk),
-
-	.vga_sda(vga_sda),
-	.vga_sdc(vga_sdc)
-);
+// vga #(
+// 	.csr_addr(4'h3),
+// 	.fml_depth(`SDRAM_DEPTH)
+// ) vga (
+// 	.sys_clk(sys_clk),
+// 	.clk50(clkin50_b),
+// 	.sys_rst(sys_rst),
+// 
+// 	.csr_a(csr_a),
+// 	.csr_we(csr_we),
+// 	.csr_di(csr_dw),
+// 	.csr_do(csr_dr_vga),
+// 
+// 	.fml_adr(fml_vga_adr),
+// 	.fml_stb(fml_vga_stb),
+// 	.fml_ack(fml_vga_ack),
+// 	.fml_di(fml_vga_dr),
+// 
+// 	.dcb_stb(dcb_stb),
+// 	.dcb_adr(dcb_adr),
+// 	.dcb_dat(dcb_dat),
+// 	.dcb_hit(dcb_hit),
+// 
+// 	.vga_psave_n(vga_psave_n),
+// 	.vga_hsync_n(vga_hsync_n),
+// 	.vga_vsync_n(vga_vsync_n),
+// 	.vga_r(vga_r),
+// 	.vga_g(vga_g),
+// 	.vga_b(vga_b),
+// 	.vga_clk(vga_clk),
+// 
+// 	.vga_sda(vga_sda),
+// 	.vga_sdc(vga_sdc)
+// );
 
 //---------------------------------------------------------------------------
 // Memory card
@@ -1118,9 +1179,9 @@ memcard #(
 );
 `else
 assign csr_dr_memcard = 32'd0;
-assign mc_d[3:0] = 4'bz;
-assign mc_cmd = 1'bz;
-assign mc_clk = 1'b0;
+// assign mc_d[3:0] = 4'bz;
+// assign mc_cmd = 1'bz;
+// assign mc_clk = 1'b0;
 `endif
 
 //---------------------------------------------------------------------------
