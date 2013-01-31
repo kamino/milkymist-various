@@ -1,10 +1,12 @@
 MMDIR=../..
 include $(MMDIR)/software/include.mak
 
-OBJECTS=crt0.o isr.o main.o unlzma.o boot.o boot-helper.o splash.o
+OBJECTS=crt0.o isr.o main.o
+## FIXME OBJECTS=crt0.o isr.o main.o unlzma.o boot.o boot-helper.o splash.o
 SEGMENTS=-j .text -j .data -j .rodata
-LIBS=$(MMDIR)/software/libhpdmc/libhpdmc.a $(MMDIR)/software/libbase/libbase-light.a \
-     $(MMDIR)/software/libhal/libhal.a     $(MMDIR)/software/libnet/libnet.a
+LIBS=$(MMDIR)/software/libbase/libbase-light.a
+## FIXME LIBS=$(MMDIR)/software/libhpdmc/libhpdmc.a $(MMDIR)/software/libbase/libbase-light.a \
+## FIXME      $(MMDIR)/software/libhal/libhal.a     $(MMDIR)/software/libnet/libnet.a
 
 all: bios.bin bios-rescue.bin
 
@@ -18,7 +20,8 @@ bios.elf: linker.ld $(OBJECTS) $(LIBS)
 bios-rescue.elf: linker-rescue.ld $(OBJECTS) $(LIBS)
 
 %.elf:
-	$(LD) $(LDFLAGS) -T $< -N -o $@ $(OBJECTS) -L$(MMDIR)/software/libhpdmc -L$(MMDIR)/software/libbase -L$(MMDIR)/software/libhal -L$(MMDIR)/software/libnet --start-group -lhpdmc -lbase-light -lhal -lnet --end-group
+	$(LD) $(LDFLAGS) -T $< -N -o $@ $(OBJECTS) -L$(MMDIR)/software/libhpdmc -L$(MMDIR)/software/libbase -L$(MMDIR)/software/libhal -L$(MMDIR)/software/libnet --start-group -lbase-light --end-group
+	# $(LD) $(LDFLAGS) -T $< -N -o $@ $(OBJECTS) -L$(MMDIR)/software/libhpdmc -L$(MMDIR)/software/libbase -L$(MMDIR)/software/libhal -L$(MMDIR)/software/libnet --start-group -lhpdmc -lbase-light -lhal -lnet --end-group
 	chmod -x $@
 
 $(MMDIR)/software/libhpdmc/libhpdmc.a:

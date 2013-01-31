@@ -30,10 +30,11 @@ void isr(void)
 
 	if(irqs & IRQ_UART)
 		uart_isr();
-		
+#ifdef FIXME
 	if(irqs & IRQ_TMU)
 		tmu_isr();
 
 	if(irqs & IRQ_USB)
 		usb_isr();
+#endif
 }

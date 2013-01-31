@@ -26,6 +26,12 @@ static console_write_hook write_hook;
 static console_read_hook read_hook;
 static console_read_nonblock_hook read_nonblock_hook;
 
+static void delay(void)
+{
+    volatile int i;
+    for(i=0;i<1000;i++);
+}
+
 void console_set_write_hook(console_write_hook h)
 {
 	write_hook = h;
@@ -51,6 +57,10 @@ char readchar(void)
 			return uart_read();
 		if((read_nonblock_hook != NULL) && read_nonblock_hook())
 			return read_hook();
+        /* When hook is not set, avoids infinite loop that may prevent the CPU
+         * to catch interruptions.
+         */
+        delay();
 	}
 }
 

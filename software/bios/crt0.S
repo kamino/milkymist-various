@@ -33,7 +33,9 @@ _reset_handler:
 	mvhi	r1, hi(_reset_handler)
 	ori	r1, r1, lo(_reset_handler)
 	wcsr	EBA, r1
+#ifdef FIXME
 	calli	_sdram_init
+#endif
 	xor	r2, r2, r2
 	bi	_crt0
 

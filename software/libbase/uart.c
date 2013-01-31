@@ -34,7 +34,8 @@ static char rx_buf[UART_RINGBUFFER_SIZE_RX];
 static volatile unsigned int rx_produce;
 static volatile unsigned int rx_consume;
 
-#define UART_RINGBUFFER_SIZE_TX 131072
+//#define UART_RINGBUFFER_SIZE_TX 131072
+#define UART_RINGBUFFER_SIZE_TX 4096
 #define UART_RINGBUFFER_MASK_TX (UART_RINGBUFFER_SIZE_TX-1)
 
 static char tx_buf[UART_RINGBUFFER_SIZE_TX];

@@ -50,6 +50,7 @@ enum {
 
 /* General address space functions */
 
+#ifdef FIXME
 #define NUMBER_OF_BYTES_ON_A_LINE 16
 static void dump_bytes(unsigned int *ptr, int count, unsigned addr)
 {
@@ -416,6 +417,7 @@ static void help(void)
 	puts("reboot     - system reset");
 	puts("reconf     - reload FPGA configuration");
 }
+#endif
 
 static char *get_token(char **str)
 {
@@ -439,6 +441,7 @@ static void do_command(char *c)
 
 	token = get_token(&c);
 
+#ifdef FIXME
 	if(strcmp(token, "cons") == 0) vga_set_console(!vga_get_console());
 	else if(strcmp(token, "flush") == 0) flush_bridge_cache();
 	else if(strcmp(token, "mr") == 0) mr(get_token(&c), get_token(&c));
@@ -467,9 +470,11 @@ static void do_command(char *c)
 	else if(strcmp(token, "wcsr") == 0) wcsr(get_token(&c), get_token(&c));
 
 	else if(strcmp(token, "") != 0)
+#endif 
 		printf("Command not found\n");
 }
 
+#ifdef FIXME
 static int test_user_abort(void)
 {
 	char c;
@@ -495,11 +500,13 @@ static int test_user_abort(void)
 	}
 	return 1;
 }
+#endif
 
 int rescue;
 
 extern unsigned int _edata;
 
+#ifdef FIXME
 static void crcbios(void)
 {
 	unsigned int offset_bios;
@@ -531,6 +538,7 @@ static void print_mac(void)
 
 	printf("I: MAC address: %02x:%02x:%02x:%02x:%02x:%02x\n", macadr[0], macadr[1], macadr[2], macadr[3], macadr[4], macadr[5]);
 }
+#endif
 
 static const char banner[] =
 	"\nMILKYMIST(tm) v"VERSION" BIOS   http://www.milkymist.org\n"
@@ -539,6 +547,7 @@ static const char banner[] =
 	"it under the terms of the GNU General Public License as published by\n"
 	"the Free Software Foundation, version 3 of the License.\n\n";
 
+#ifdef FIXME
 static void boot_sequence(void)
 {
 	if(test_user_abort()) {
@@ -556,6 +565,7 @@ static void boot_sequence(void)
 		printf("E: No boot medium found\n");
 	}
 }
+#endif
 
 static void readstr(char *s, int size)
 {
@@ -575,7 +585,9 @@ static void readstr(char *s, int size)
 				}
 				break;
 			case '\e':
+#ifdef FIXME
 				vga_set_console(!vga_get_console());
+#endif
 				break;
 			case 0x07:
 				break;
@@ -593,6 +605,7 @@ static void readstr(char *s, int size)
 	}
 }
 
+#ifdef FIXME
 static void ethreset_delay(void)
 {
 	CSR_TIMER0_COUNTER = 0;
@@ -608,16 +621,19 @@ static void ethreset(void)
 	CSR_MINIMAC_SETUP = 0;
 	ethreset_delay();
 }
+#endif
 
 int main(int i, char **c)
 {
 	char buffer[64];
 
+#ifdef FIXME
 	/* lock gdbstub ROM */
 	CSR_DBG_CTRL = DBG_CTRL_GDB_ROM_LOCK;
 
 	/* enable bus errors */
 	CSR_DBG_CTRL = DBG_CTRL_BUS_ERR_EN;
+#endif
 
 	CSR_GPIO_OUT = GPIO_LED1;
 	rescue = !((unsigned int)main > FLASH_OFFSET_REGULAR_BIOS);
@@ -625,8 +641,12 @@ int main(int i, char **c)
 	irq_setmask(0);
 	irq_enable(1);
 	uart_init();
+#ifdef FIXME
 	vga_init(!(rescue || (CSR_GPIO_IN & GPIO_BTN2)));
+#endif
 	putsnonl(banner);
+
+#ifdef FIXME
 	crcbios();
 	brd_init();
 	tmu_init(); /* < for hardware-accelerated scrolling */
@@ -642,6 +662,7 @@ int main(int i, char **c)
 	boot_sequence();
 	vga_unblank();
 	vga_set_console(1);
+#endif
 	while(1) {
 		putsnonl("\e[1mBIOS>\e[0m ");
 		readstr(buffer, 64);
