@@ -7,9 +7,9 @@
 *.fpg
 *.raw
 *.fbi
-boards/milkymist-one/synthesis/build
-boards/milkymist-one/synthesis/build-rescue
-boards/milkymist-one/standby/build
+boards/*/synthesis/build
+boards/*/synthesis/build-rescue
+boards/*/standby/build
 software/demo/logo.h
 software/libfpvm/parser.c
 software/libfpvm/parser.h
