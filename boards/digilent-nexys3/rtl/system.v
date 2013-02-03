@@ -21,13 +21,13 @@
 module system(
 	input clkin100,
 
-	// ROM & RAM shared signals
+	// Boot ROM
 	output [25:0] mem_adr,
 	inout [15:0] mem_d,
 	output mem_oe_n,
 	output mem_we,
 
-    // Flash signals
+	// Flash specific
 	output flash_ce_n,
 	output flash_rst_n,
 
@@ -297,19 +297,6 @@ end
 // assign ac97_rst_n = ~sys_rst;
 // assign videoin_rst_n = ~sys_rst;
 
-//------------------------------------------------------------------
-// Flash
-//------------------------------------------------------------------
-wire [25:0] flash_adr;
-wire [15:0] flash_d;
-wire flash_oe_n;
-wire flash_we_n;
-
-assign mem_adr = (~flash_ce_n) ? flash_adr : 26'bx;
-assign mem_d = (~flash_ce_n) ? flash_d : 16'bx;
-assign mem_oe_n = (~flash_ce_n) ? flash_oe_n : 1'b1;
-assign mem_we = (~flash_ce_n) ? flash_we : 1'bx;
-
 /*
  * We must release the Flash reset before the system reset
  * because the Flash needs some time to come out of reset
@@ -329,7 +316,6 @@ always @(posedge sys_clk) begin
 end
 
 assign flash_rst_n = flash_rstcounter[7];
-
 
 //------------------------------------------------------------------
 // Wishbone master wires
@@ -944,6 +930,10 @@ lm32_top cpu(
 //---------------------------------------------------------------------------
 // Boot ROM
 //---------------------------------------------------------------------------
+wire [25:0] flash_adr;
+wire [15:0] flash_d;
+wire flash_oe_n;
+wire flash_we_n;
 norflash16 #(
 	.adr_width(24)
 ) norflash (
@@ -966,7 +956,15 @@ norflash16 #(
 );
 
 assign flash_adr[25:24] = {2'b0}; 
-assign flash_we = ~flash_we_n;
+
+//---------------------------------------------------------------------------
+// Multiplexing FLASH signals
+//---------------------------------------------------------------------------
+assign mem_adr  = (~flash_ce_n) ? flash_adr   : 26'bx;
+assign mem_d    = (~flash_ce_n) ? flash_d     : 16'bx;
+assign mem_oe_n = (~flash_ce_n) ? flash_oe_n  : 1'b1;
+assign mem_we   = (~flash_ce_n) ? ~flash_we_n : 1'bx;
+
 assign flash_ce_n = 1'b0;
 
 //---------------------------------------------------------------------------
