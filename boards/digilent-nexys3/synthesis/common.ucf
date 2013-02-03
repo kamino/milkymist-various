@@ -54,19 +54,19 @@ NET "mem_d(*)"    IOSTANDARD = LVCMOS33 | SLEW = FAST | DRIVE = 8;
 
 NET "mem_oe_n"    LOC = L18 | IOSTANDARD = LVCMOS33 | SLEW = FAST | DRIVE = 8;
 NET "mem_we"      LOC = M16 | IOSTANDARD = LVCMOS33 | SLEW = FAST | DRIVE = 8;
-# NET "mem_adv_n"   LOC = H18 | IOSTANDARD = LVCMOS33 | SLEW = FAST | DRIVE = 8; 
-# NET "mem_wait"    LOC = V4  | IOSTANDARD = LVCMOS33 | SLEW = FAST | DRIVE = 8;
-# NET "mem_clk"     LOC = R10 | IOSTANDARD = LVCMOS33 | SLEW = FAST | DRIVE = 8;
+NET "mem_adv_n"   LOC = H18 | IOSTANDARD = LVCMOS33 | SLEW = FAST | DRIVE = 8; 
+NET "mem_wait"    LOC = V4  | IOSTANDARD = LVCMOS33 | SLEW = FAST | DRIVE = 8;
+NET "mem_clk"     LOC = R10 | IOSTANDARD = LVCMOS33 | SLEW = FAST | DRIVE = 8;
 
 # ==== Flash ====
 NET "flash_ce_n"  LOC = L17 | IOSTANDARD = LVCMOS33 | SLEW = FAST | DRIVE = 8;
 NET "flash_rst_n" LOC = T4  | IOSTANDARD = LVCMOS33 | SLEW = FAST | DRIVE = 8;
 
 # ==== PSRAM specific ====
-# NET "ram_ce_n"    LOC = L15 | IOSTANDARD = LVCMOS33 | SLEW = FAST | DRIVE = 8; 
-# NET "ram_cre"     LOC = M18 | IOSTANDARD = LVCMOS33 | SLEW = FAST | DRIVE = 8;
-# NET "ram_ub"      LOC = K15 | IOSTANDARD = LVCMOS33 | SLEW = FAST | DRIVE = 8;
-# NET "ram_lb"      LOC = K16 | IOSTANDARD = LVCMOS33 | SLEW = FAST | DRIVE = 8; 
+NET "ram_ce_n"    LOC = L15 | IOSTANDARD = LVCMOS33 | SLEW = FAST | DRIVE = 8; 
+NET "ram_cre"     LOC = M18 | IOSTANDARD = LVCMOS33 | SLEW = FAST | DRIVE = 8;
+NET "ram_ub"      LOC = K15 | IOSTANDARD = LVCMOS33 | SLEW = FAST | DRIVE = 8;
+NET "ram_lb"      LOC = K16 | IOSTANDARD = LVCMOS33 | SLEW = FAST | DRIVE = 8; 
 
 # ==== UART ====
 NET "uart_rx" LOC = N17 | IOSTANDARD = LVCMOS33;

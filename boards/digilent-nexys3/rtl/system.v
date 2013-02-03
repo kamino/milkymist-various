@@ -31,6 +31,15 @@ module system(
 	output flash_ce_n,
 	output flash_rst_n,
 
+	// PSRAM specific
+	output mem_adv_n,
+	output mem_wait,
+	output mem_clk,
+	output ram_ce_n,
+	output ram_cre,
+	output ram_ub,
+	output ram_lb,
+
 	// UART
 	input uart_rx,
 	output uart_tx,
@@ -375,6 +384,7 @@ wire		cpuibus_ack,
 // Wishbone slave wires
 //------------------------------------------------------------------
 wire [31:0]	norflash_adr,
+        psram_adr,
         bram_adr,
 		monitor_adr,
 		usb_adr,
@@ -387,6 +397,8 @@ wire [2:0]	brg_cti,
 
 wire [31:0]	norflash_dat_r,
 		norflash_dat_w,
+		psram_dat_r,
+        psram_dat_w,
 		bram_dat_r,
         bram_dat_w,
 		monitor_dat_r,
@@ -401,6 +413,7 @@ wire [31:0]	norflash_dat_r,
 		csrbrg_dat_w;
 
 wire [3:0]	norflash_sel,
+		psram_sel,
 		bram_sel,
 		monitor_sel,
 		usb_sel,
@@ -408,6 +421,7 @@ wire [3:0]	norflash_sel,
 		brg_sel;
 
 wire		norflash_we,
+        psram_we,
         bram_we,
 		monitor_we,
 		usb_we,
@@ -416,6 +430,7 @@ wire		norflash_we,
 		csrbrg_we;
 
 wire		norflash_cyc,
+		psram_cyc,
 		bram_cyc,
 		monitor_cyc,
 		usb_cyc,
@@ -424,6 +439,7 @@ wire		norflash_cyc,
 		csrbrg_cyc;
 
 wire		norflash_stb,
+		psram_stb,
 		bram_stb,
 		monitor_stb,
 		usb_stb,
@@ -432,6 +448,7 @@ wire		norflash_stb,
 		csrbrg_stb;
 
 wire		norflash_ack,
+		psram_ack,
 		bram_ack,
 		monitor_ack,
 		usb_ack,
@@ -532,15 +549,24 @@ conbus5x6 #(
 	.s0_stb_o(norflash_stb),
 	.s0_ack_i(norflash_ack),
 	// Slave 1
-	.s1_dat_i(monitor_dat_r),
-	.s1_dat_o(monitor_dat_w),
-	.s1_adr_o(monitor_adr),
+	.s1_dat_i(psram_dat_r),
+	.s1_dat_o(psram_dat_w),
+	.s1_adr_o(psram_adr),
 	.s1_cti_o(),
-	.s1_sel_o(monitor_sel),
-	.s1_we_o(monitor_we),
-	.s1_cyc_o(monitor_cyc),
-	.s1_stb_o(monitor_stb),
-	.s1_ack_i(monitor_ack),
+	.s1_sel_o(psram_sel),
+	.s1_we_o(psram_we),
+	.s1_cyc_o(psram_cyc),
+	.s1_stb_o(psram_stb),
+	.s1_ack_i(psram_ack),
+// 	.s1_dat_i(monitor_dat_r),
+// 	.s1_dat_o(monitor_dat_w),
+// 	.s1_adr_o(monitor_adr),
+// 	.s1_cti_o(),
+// 	.s1_sel_o(monitor_sel),
+// 	.s1_we_o(monitor_we),
+// 	.s1_cyc_o(monitor_cyc),
+// 	.s1_stb_o(monitor_stb),
+// 	.s1_ack_i(monitor_ack),
 	// Slave 2
 	.s2_dat_i(usb_dat_r),
 	.s2_dat_o(usb_dat_w),
@@ -958,22 +984,55 @@ norflash16 #(
 assign flash_adr[25:24] = {2'b0}; 
 
 //---------------------------------------------------------------------------
+// PSRAM
+//---------------------------------------------------------------------------
+wire [25:0] ram_adr;
+wire [15:0] ram_dq;
+wire ram_oe_n;
+wire ram_we_n;
+
+psram #(
+	.adr_width(22),
+	.init_timing(16'h2ee0)
+) (
+	.sys_clk(sys_clk),
+	.sys_rst(sys_rst),
+	
+	.wb_adr_i(psram_adr),
+	.wb_dat_o(psram_dat_r),
+	.wb_dat_i(psram_dat_w),
+	.wb_sel_i(psram_sel),
+	.wb_stb_i(psram_stb),
+	.wb_cyc_i(psram_cyc),
+	.wb_ack_o(psram_ack),
+	.wb_we_i(psram_we),
+
+	.psram_adr(ram_adr),
+	.psram_dq(ram_dq),
+	.psram_oe_n(ram_oe_n),
+	.psram_we_n(ram_we_n),
+	.psram_ce_n(ram_ce_n),
+	.psram_cre(ram_cre),
+	.psram_wait(mem_wait),
+	.psram_adv_n(mem_adv_n),
+	.psram_clk(mem_clk),
+	.psram_lb(ram_lb),
+	.psram_ub(ram_ub)
+);
+
+//---------------------------------------------------------------------------
 // Multiplexing FLASH signals
 //---------------------------------------------------------------------------
-assign mem_adr  = (~flash_ce_n) ? flash_adr   : 26'bx;
-assign mem_d    = (~flash_ce_n) ? flash_d     : 16'bx;
-assign mem_oe_n = (~flash_ce_n) ? flash_oe_n  : 1'b1;
-assign mem_we   = (~flash_ce_n) ? ~flash_we_n : 1'bx;
+assign mem_adr  = (~flash_ce_n) ? flash_adr   : ram_adr;
+assign mem_d    = (~flash_ce_n) ? flash_d     : ram_dq;
+assign mem_oe_n = (~flash_ce_n) ? flash_oe_n  : ram_oe_n;
+assign mem_we   = (~flash_ce_n) ? ~flash_we_n : ~ram_we_n;
 
 assign flash_ce_n = 1'b0;
 
 //---------------------------------------------------------------------------
 // BRAM
 //---------------------------------------------------------------------------
-//
-// On this board, we have 16k of SRAM instead of 4k
-// so that we have space for loading some programs.
-//
 bram #(
     .adr_width(14)
 ) bram (
