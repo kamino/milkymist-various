@@ -21,11 +21,13 @@
 module system(
 	input clkin100,
 
-	// Boot ROM
-	output [25:0] flash_adr,
-	inout [15:0] flash_d,
-	output flash_oe_n,
-	output flash_we,
+	// ROM & RAM shared signals
+	output [25:0] mem_adr,
+	inout [15:0] mem_d,
+	output mem_oe_n,
+	output mem_we,
+
+    // Flash signals
 	output flash_ce_n,
 	output flash_rst_n,
 
@@ -45,20 +47,6 @@ module system(
 	output led5,
 	output led6,
 	output led7
-
-	// DDR SDRAM
-// 	output sdram_clk_p,
-// 	output sdram_clk_n,
-// 	output sdram_cke,
-// 	output sdram_cs_n,
-// 	output sdram_we_n,
-// 	output sdram_cas_n,
-// 	output sdram_ras_n,
-// 	output [3:0] sdram_dm,
-// 	output [12:0] sdram_adr,
-// 	output [1:0] sdram_ba,
-// 	inout [31:0] sdram_dq,
-// 	inout [3:0] sdram_dqs,
 
 	// VGA
 // 	output vga_psave_n,
@@ -309,6 +297,19 @@ end
 // assign ac97_rst_n = ~sys_rst;
 // assign videoin_rst_n = ~sys_rst;
 
+//------------------------------------------------------------------
+// Flash
+//------------------------------------------------------------------
+wire [25:0] flash_adr;
+wire [15:0] flash_d;
+wire flash_oe_n;
+wire flash_we_n;
+
+assign mem_adr = (~flash_ce_n) ? flash_adr : 26'bx;
+assign mem_d = (~flash_ce_n) ? flash_d : 16'bx;
+assign mem_oe_n = (~flash_ce_n) ? flash_oe_n : 1'b1;
+assign mem_we = (~flash_ce_n) ? flash_we : 1'bx;
+
 /*
  * We must release the Flash reset before the system reset
  * because the Flash needs some time to come out of reset
@@ -328,6 +329,7 @@ always @(posedge sys_clk) begin
 end
 
 assign flash_rst_n = flash_rstcounter[7];
+
 
 //------------------------------------------------------------------
 // Wishbone master wires
@@ -942,7 +944,6 @@ lm32_top cpu(
 //---------------------------------------------------------------------------
 // Boot ROM
 //---------------------------------------------------------------------------
-wire flash_we_n;
 norflash16 #(
 	.adr_width(24)
 ) norflash (
